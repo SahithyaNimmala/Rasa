@@ -13,7 +13,7 @@ const Home = () => {
   const [loadPost, setLoadPost] = useState(false);
   // const [loadUser, setLoadUser] = useState(false);
   const current_user = useUserState();
-  const [changePost,setChangePost] = useState(false)
+  const [changePost, setChangePost] = useState(false);
 
   // get posts
   useEffect(() => {
@@ -22,7 +22,8 @@ const Home = () => {
       .get("post?limit=100")
       .then((res) => {
         setLoadPost(false);
-        console.log(res.data);
+        console.log(res.data.results);
+        const ar = res.data.results
         setPosts(res.data.results);
       })
       .catch((err) => {
@@ -31,32 +32,25 @@ const Home = () => {
       });
   }, [changePost]);
 
-
-
   return (
     <DashBoardTemplate>
       <div className="mx-auto  max-w-4xl h-full ">
         <div className="  h-full grid grid-cols-12 gap-10">
           <div className=" overflow-y-auto col-span-12 md:col-span-8 w-full ">
             {!loadPost ? (
-              posts.map((post) => (
-                <PostCard
-                  profileImage={post.user.image}
-                  profileName={post.user.name}
-                  postImage={post.image}
-                  likeNumber={post.likes}
-                  key={post.id}
-                />
-              ))
+              posts.map((post) => <PostCard {...post} key={post.id} />)
             ) : (
               <Loader />
             )}
           </div>
           <div className=" hidden md:inline col-span-4 space-y-4">
             <UserInfoCard key={current_user.id} {...current_user} />
-            <h1  className='text-xl pr-red-cg mt-5'> Post </h1>
-            <div className='h-96  overflow-scroll space-y-4 p-2 '>
-              <PostCreateCard changePost={changePost} setChangePost={setChangePost}></PostCreateCard>
+            <h1 className="text-xl pr-red-cg mt-5"> Post </h1>
+            <div className="h-96  overflow-scroll space-y-4 p-2 ">
+              <PostCreateCard
+                changePost={changePost}
+                setChangePost={setChangePost}
+              ></PostCreateCard>
             </div>
           </div>
         </div>
