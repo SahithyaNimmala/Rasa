@@ -19,7 +19,15 @@ const getPosts = {
   }),
 };
 
+const updatePost = {
+  query: Joi.object().keys({
+    user: Joi.custom(objectId),
+    id: Joi.custom(objectId),
+  }),
+};
+
 module.exports = {
   createPost,
   getPosts,
+  updatePost
 };
