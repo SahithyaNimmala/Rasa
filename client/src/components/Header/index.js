@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   signOut,
-  signOutWithoutDispatcher,
   useUserDispatch,
   useUserState,
 } from "../../context/userContext";
