@@ -5,16 +5,18 @@ const postValidation = require('../../validations/post.validation');
 const postController = require('../../controllers/post.controller');
 const userValidation = require('../../validations/user.validation');
 
-const router = express.Router();
+const Router = express.Router();
 
 
-router.route('/')
+Router.route('/')
 .get(auth('getPosts'),validate(postValidation.getPosts),postController.getAllPost)
 .post(auth('managePost'),validate(postValidation.createPost),postController.createPost)
+.put(auth('updatePost'),validate(postValidation.updatePost),postController.updatePost)
 
-router.route('/user/:userId')
+
+Router.route('/user/:userId')
 .get(auth('getPostUserById'),validate(userValidation.getUser),postController.getPostByUserId)
 
 
 
-module.exports = router;
+module.exports = Router;

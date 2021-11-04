@@ -8,6 +8,20 @@ const createPost = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(Post);
 });
 
+const updatePost = catchAsync(async (req, res) => {
+  let result = null;
+  if (req.body.type == "like") {
+    result = await postService.likePost(req.body.id, req.body.user);
+  } else {
+    result = await postService.comment(
+      req.body.id,
+      req.body.user,
+      req.body.text
+    );
+  }
+  res.send(result);
+});
+
 const getPostByUserId = catchAsync(async (req, res) => {
   const result = await postService.getPostByUser(req.params.userId);
   res.send(result);
@@ -24,4 +38,5 @@ module.exports = {
   createPost,
   getAllPost,
   getPostByUserId,
+  updatePost,
 };
