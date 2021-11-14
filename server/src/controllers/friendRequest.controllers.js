@@ -26,7 +26,8 @@ const getRequestFriends = catchAsync(async (req, res) => {
 });
 
 const updateFriendRequest = catchAsync(async (req, res) => {
-  const friends = await friendService.updateFriendRequest(req.params.userId);
+  console.log(req.body)
+  const friends = await friendService.updateFriendRequest(req.body.from_user,req.body.to_user);
   res.send(friends);
 });
 module.exports = {

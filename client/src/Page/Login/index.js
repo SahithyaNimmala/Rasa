@@ -88,9 +88,9 @@ const Login = () => {
           <div className="text-center">
             <a
               className="text-right font-bold text-sm pr-blu-cg hover:text-blue-800"
-              href="/forgot-password"
+              href="/signup"
             >
-              Forgot Password?
+              Signup?
             </a>
           </div>
         </form>

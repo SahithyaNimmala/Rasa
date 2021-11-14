@@ -114,6 +114,17 @@ const Header = () => {
                   >
                     Friends
                   </a>
+                  <a
+                    href="/friend-request"
+                    className={` px-3 py-2 rounded-md text-sm hover:bg-gray-700 hover:text-white font-medium transition duration-500 ease-in-out transform hover:-translate-y-1 ${
+                      location === "/friend-request"
+                        ? "pr-red-bg text-white"
+                        : "pr-dblu-cg"
+                    } `}
+                  >
+                    Request
+                  </a>
+                  
                 </div>
               </div>
             </div>

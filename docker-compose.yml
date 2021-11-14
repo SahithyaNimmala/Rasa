@@ -2,6 +2,8 @@ version: '3'
 
 services:
   backend-app:
+    env_file:
+     - server/env
     build: .
     image: backend-app
     environment:
@@ -43,7 +45,7 @@ services:
     networks:
       - node-network
 
-volumes:
+volumes:    
   dbdata:
 
 networks:

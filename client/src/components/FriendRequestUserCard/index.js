@@ -21,6 +21,7 @@ from_user,
 to_user
 }) => {
   const sendRequest = () => {
+    console.log(from_user,to_user)
     sendRequestToUser(from_user.id,to_user.id);
   };
 

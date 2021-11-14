@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { friend, User } = require("../models");
 const Friend = require("../models/friends.model");
+const { getUserById } = require("./user.service");
 
 const createFriend = (data) => {
   return friend.create(data);
@@ -56,11 +57,12 @@ const getRequestFriends = (from_user) => {
   }).populate(["to_user", "from_user"]);
 };
 
-const updateFriendRequest = (from_user, to_user) => {
+const updateFriendRequest = async (from_user2, to_user2) => {
+  console.log(from_user2)
   return Friend.updateOne(
     {
-      from_user: from_user,
-      to_user: to_user,
+      from_user: from_user2,
+      to_user: to_user2,
     },
     { status: 2 }
   );
@@ -71,5 +73,5 @@ module.exports = {
   createFriend,
   getConnectedFriends,
   getRequestFriends,
-  updateFriendRequest
+  updateFriendRequest,
 };
