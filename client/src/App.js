@@ -11,6 +11,7 @@ import Chat from './Page/chat';
 import LookFriends from './Page/FriendUsers';
 import Home from './Page/Home';
 import Login from './Page/Login';
+import Signup from './Page/Signup';
 import User from './Page/User';
 import UserProfile from './Page/UserProfile';
 import { PrivateRoute, PublicRoute } from "./routes"
@@ -49,6 +50,7 @@ function App() {
             isAuthenticated={isAuthenticated}
           />
           <PublicRoute exact path="/login" component={Login} isAuthenticated={isAuthenticated} />
+          <PublicRoute exact path="/signup" component={Signup}  />
 
         </Switch>
       </BrowserRouter>

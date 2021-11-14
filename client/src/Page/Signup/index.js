@@ -1,18 +1,41 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useHistory, useLocation } from "react-router";
 import Loader from "../../components/Loader";
-import { useUserDispatch, loginUser } from "../../context/userContext";
 import rasalogo from "../../Static/illustratos/main-rasa.png";
 
-const login = (target, setIsLoading, setError, userDispatch) => {
-  const email = target[0].value;
-  const password = target[1].value;
-  loginUser(userDispatch, email, password, setIsLoading, setError);
-};
-
-const Login = () => {
+const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const userDispatch = useUserDispatch();
+  const history = useHistory();
+
+
+  const postSignup = (target) => {
+    setIsLoading(true);
+
+    const email = target[1].value;
+    const password = target[2].value;
+    const name = target[0].value;
+
+    const body = {
+      name: name,
+      email: email,
+      password: password,
+    };
+    console.log(body)
+
+    axios
+      .post("http://localhost:8080/v1/auth/register", body)
+      .then((data) => {
+        setIsLoading(false);
+        history.push("/login");
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -30,7 +53,7 @@ const Login = () => {
           className="font-poppins shadow-xl rounded-lg bg-white shadow-md border rounded px-8 pt-6 pb-8 mb-4 "
           onSubmit={(e) => {
             e.preventDefault();
-            login(e.target, setIsLoading, setError, userDispatch);
+            postSignup(e.target);
           }}
         >
           <div className="header mb-4 text-2xl text-center flex flex-col justify-center items-center">
@@ -51,6 +74,20 @@ const Login = () => {
               <span className="block sm:inline">{error}</span>
             </div>
           ) : null}
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="username"
+            >
+              Username
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              id="username"
+              type="text"
+              placeholder="username"
+            />
+          </div>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -83,14 +120,14 @@ const Login = () => {
             className=" w-full pr-red-bg hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4"
             type="submit"
           >
-            Login
+            Signup
           </button>
           <div className="text-center">
             <a
               className="text-right font-bold text-sm pr-blu-cg hover:text-blue-800"
-              href="/forgot-password"
+              href="/login"
             >
-              Forgot Password?
+              Login
             </a>
           </div>
         </form>
@@ -99,4 +136,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
