@@ -14,4 +14,20 @@ router
     friendController.createFriendRequest
   );
 
+router
+  .route("/:userId")
+  .get(
+    auth("getFriendRequest"),
+    validate(friendValidation.userId),
+    friendController.getRequestFriends
+  );
+
+router
+  .route("/update")
+  .post(
+    auth("updateFriendRequest"),
+    validate(friendValidation.createFriendRequest),
+    friendController.updateFriendRequest
+  );
+
 module.exports = router;

@@ -20,8 +20,19 @@ const getConnectedFriends = catchAsync(async (req, res) => {
   res.send(friends);
 });
 
+const getRequestFriends = catchAsync(async (req, res) => {
+  const friends = await friendService.getRequestFriends(req.params.userId);
+  res.send(friends);
+});
+
+const updateFriendRequest = catchAsync(async (req, res) => {
+  const friends = await friendService.updateFriendRequest(req.params.userId);
+  res.send(friends);
+});
 module.exports = {
   createFriendRequest,
   getFriendUser,
-  getConnectedFriends
+  getConnectedFriends,
+  getRequestFriends,
+  updateFriendRequest
 };

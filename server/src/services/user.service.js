@@ -1,5 +1,6 @@
 const httpStatus = require("http-status");
 const { User } = require("../models");
+const Friend = require("../models/friends.model");
 const ApiError = require("../utils/ApiError");
 
 /**
@@ -16,6 +17,17 @@ const createUser = async (userBody) => {
 
 const createFriendToUser = async (from_user, to_user) => {
   return User.updateOne({ _id: from_user }, { $push: { friends: to_user } });
+};
+
+const createFriendRequestToUser = async (from_user, to_user) => {
+  return Friend.create({ from_user: from_user, to_user: to_user, status: 1 });
+};
+
+const acceptFriendRequest = async (from_user, to_user) => {
+  return Friend.updateOne(
+    { from_user: from_user, to_user: to_user },
+    { status: 2 }
+  );
 };
 
 /**

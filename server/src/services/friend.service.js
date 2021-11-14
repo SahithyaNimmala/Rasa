@@ -46,11 +46,30 @@ const getConnectedFriends = (from_user) => {
         status: 2,
       },
     ],
-  }).populate(['to_user',"from_user"]);
+  }).populate(["to_user", "from_user"]);
+};
+
+const getRequestFriends = (from_user) => {
+  return Friend.find({
+    to_user: mongoose.Types.ObjectId(from_user),
+    status: 1,
+  }).populate(["to_user", "from_user"]);
+};
+
+const updateFriendRequest = (from_user, to_user) => {
+  return Friend.updateOne(
+    {
+      from_user: from_user,
+      to_user: to_user,
+    },
+    { status: 2 }
+  );
 };
 
 module.exports = {
   getFriends,
   createFriend,
   getConnectedFriends,
+  getRequestFriends,
+  updateFriendRequest
 };

@@ -9,7 +9,7 @@ const router = express.Router();
 router
   .route("/:userId")
   .get(
-    auth("getfiends"),
+    auth("getFriends"),
     validate(friendValidation.userId),
     friendController.getFriendUser
   );
@@ -21,5 +21,7 @@ router
     validate(friendValidation.userId),
     friendController.getConnectedFriends
   );
+
+
 
 module.exports = router;
