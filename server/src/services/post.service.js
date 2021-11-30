@@ -2,6 +2,7 @@ const { Post } = require("../models");
 const { getUserById } = require("./user.service");
 
 const createPost = async (postbody) => {
+  console.log(postbody)
   return Post.create(postbody);
 };
 
@@ -20,7 +21,6 @@ const likePost = async (id, user) => {
 
 const comment = async (id, user, text) => {
   let commentUser = await getUserById(user);
-  console.log(text);
   let data = await Post.updateOne(
     { _id: id },
     { $push: { comments: { text: text, postedBy: user } } }

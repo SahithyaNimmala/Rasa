@@ -5,8 +5,9 @@ import { useUserState } from "../../context/userContext";
 import axios from "axios";
 import { useState } from "react";
 import sendPng from "../../Static/icons/send.png";
+import { ReactComponent as MusicSvg } from "../../Static/illustratos/music.svg";
 
-const PostCard = ({ image, likes, user, comments, id }) => {
+const PostCard = ({ image, likes, user, comments, id, music }) => {
   const current_user = useUserState();
   const [postLikes, setPostLikes] = useState(likes.length);
   const [postComments, setPostComments] = useState(comments);
@@ -47,6 +48,8 @@ const PostCard = ({ image, likes, user, comments, id }) => {
       );
   }
 
+  console.log(music);
+  console.log(image);
   return (
     <div className="overflow-hidden shadow-lg  rounded-2xl  w-full  cursor-pointer m-auto mb-6">
       <div className="bg-white w-full p-4 flex items-center ">
@@ -60,11 +63,22 @@ const PostCard = ({ image, likes, user, comments, id }) => {
         <p className=" ml-4 text-sm pr-red-cg font-medium">{user.name}</p>
       </div>
       <div className="w-full block h-full bg-white p-2">
-        <img
-          alt="profile"
-          src={image}
-          className="max-h-1/4 w-full object-cover bg-white rounded-3xl "
-        />
+        {!music ? (
+          <img
+            alt="profile"
+            src={image}
+            className="max-h-1/4 w-full object-cover bg-white rounded-3xl"
+          />
+        ) : (
+          <>
+            <MusicSvg className="h-64 w-full object-cover bg-white rounded-3xl"/>
+            <audio
+              controls
+              className="w-11/12 mx-auto mt-8"
+              src={`http://localhost:8080/${music}`}
+            />
+          </>
+        )}
         <div className="bg-white flex gap-4 w-full p-4 items-center">
           <LikeSvg
             className="h-8 transition duration-500 ease-in-out transform hover:-translate-y-1"
@@ -74,7 +88,7 @@ const PostCard = ({ image, likes, user, comments, id }) => {
           ></LikeSvg>
           <img
             src={commentPng}
-            onClick={()=> setViewComments(!viewComments)}
+            onClick={() => setViewComments(!viewComments)}
             className="h-9 transition duration-500 ease-in-out transform hover:-translate-y-1"
             alt="post"
           ></img>

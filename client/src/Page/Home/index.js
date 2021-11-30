@@ -6,6 +6,7 @@ import UserInfoCard from "../../components/UserInfoCard";
 import { useUserState } from "../../context/userContext";
 import Loader from "../../components/Loader";
 import PostCreateCard from "../../components/PostCreateCard";
+import Player from "../../components/AudioCard";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -23,7 +24,7 @@ const Home = () => {
       .then((res) => {
         setLoadPost(false);
         console.log(res.data.results);
-        const ar = res.data.results
+        const ar = res.data.results;
         setPosts(res.data.results);
       })
       .catch((err) => {
@@ -46,6 +47,7 @@ const Home = () => {
           <div className=" hidden md:inline col-span-4 space-y-4">
             <UserInfoCard key={current_user.id} {...current_user} />
             <h1 className="text-xl pr-red-cg mt-5"> Post </h1>
+      
             <div className="h-96  overflow-scroll space-y-4 p-2 ">
               <PostCreateCard
                 changePost={changePost}

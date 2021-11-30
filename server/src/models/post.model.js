@@ -21,7 +21,7 @@ const postSchema = mongoose.Schema(
         user: {
           type: mongoose.SchemaTypes.ObjectId,
           ref: "User",
-          unique: true,
+          unique:false
         },
       },
     ],
@@ -31,7 +31,7 @@ const postSchema = mongoose.Schema(
         postedBy: {
           type: mongoose.SchemaTypes.ObjectId,
           ref: "User",
-          unique: true,
+          unique: false,
         },
       },
     ],

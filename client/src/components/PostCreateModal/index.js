@@ -2,22 +2,37 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
 import { useUserState } from "../../context/userContext";
-import {ReactComponent as PostSvg } from "../../Static/illustratos/post-upload.svg"
- 
+import { ReactComponent as PostSvg } from "../../Static/illustratos/post-upload.svg";
 
-export default function PostCreateModal({ open, setOpen,changePost,setChangePost }) {
+export default function PostCreateModal({
+  open,
+  setOpen,
+  changePost,
+  setChangePost,
+}) {
   const cancelButtonRef = useRef(null);
   const currentUser = useUserState();
-  const [selectedImage, setSelectedImage] = useState();
+  const [selectedImage, setSelectedImage] = useState(false);
+  const [selectedAudio, setSelectedAudio] = useState(false);
 
   function createPost(postPath) {
-      console.log(postPath)
+    console.log(postPath);
+    var data = null;
+    if (selectedImage) {
+      data = { image: postPath, user: currentUser.id };
+    }
+    if (selectedAudio) {
+      data = { music: postPath, user: currentUser.id };
+    }
+
     axios
-      .post("/post",{ "image": postPath, "user": currentUser.id })
+      .post("/post", data)
       .then((res) => {
         console.log(res);
-        setChangePost(!changePost)
-        setOpen(false)
+        setChangePost(!changePost);
+        setOpen(false);
+        setSelectedAudio(false);
+        setSelectedImage(false);
       })
       .catch((err) => console.log(err));
   }
@@ -26,9 +41,14 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
   function formSubmit(e) {
     e.preventDefault();
     var image = document.querySelector("#post-image");
+    var audio = document.querySelector("#post-audio");
     var form = new FormData();
-    form.append("sampleFile", image.files[0]);
-
+    if (selectedImage) {
+      form.append("sampleFile", image.files[0]);
+    }
+    if (setSelectedAudio) {
+      form.append("sampleFile", audio.files[0]);
+    }
     axios({
       method: "post",
       url: "/upload",
@@ -36,6 +56,7 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (res) {
+        console.log(res.data.path)
         createPost(res.data.path);
       })
       .catch(function (response) {
@@ -50,8 +71,18 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
     }
   };
 
+  const audioChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedAudio(e.target.files[0]);
+    }
+  };
+
   const removeSelectedImage = () => {
     setSelectedImage();
+  };
+
+  const removeSelectedAudio = (e) => {
+    setSelectedAudio();
   };
 
   return (
@@ -75,7 +106,6 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
             aria-hidden="true"
@@ -101,7 +131,6 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
                 </h1>
                 <div className="h-full flex justify-center items-center  ">
                   <div className="">
-                    
                     <form onSubmit={(e) => formSubmit(e)}>
                       <input
                         id="post-image"
@@ -111,17 +140,33 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
                         onChange={imageChange}
                         hidden
                       />
+                      <input
+                        id="post-audio"
+                        accept="audio/*"
+                        name="postVoice"
+                        type="file"
+                        onChange={audioChange}
+                        hidden
+                      />
                       <button type="submit" id="submit-form"></button>
                     </form>
-                    {!selectedImage ? (<div className=' flex flex-col'>
-                      <PostSvg  style={styles.postHeight}/>
-                      <label
-                        htmlFor="post-image"
-                        className="pr-red-bg hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer text-center min-w-full"
-                      >
- 
-                        upload{" "}
-                      </label>
+                    {!selectedImage && !selectedAudio ? (
+                      <div className=" flex flex-col ">
+                        <PostSvg style={styles.postHeight} />
+                        <div className="flex gap-2 justify-center">
+                          <label
+                            htmlFor="post-image"
+                            className="pr-red-bg hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer text-center "
+                          >
+                            Upload Image
+                          </label>
+                          <label
+                            htmlFor="post-audio"
+                            className="pr-red-bg hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer text-center "
+                          >
+                            Upload Voice
+                          </label>
+                        </div>
                       </div>
                     ) : null}
                     {selectedImage && (
@@ -134,6 +179,28 @@ export default function PostCreateModal({ open, setOpen,changePost,setChangePost
                         />
                         <button
                           onClick={removeSelectedImage}
+                          className="pr-red-bg hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer mt-4 w-full max-w-lg "
+                        >
+                          Remove
+                        </button>{" "}
+                        <label
+                          htmlFor="submit-form"
+                          type="submit"
+                          className="bg-blue-700 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg cursor-pointer mt-4 w-full max-w-lg mx-auto text-center"
+                        >
+                          Create
+                        </label>
+                      </div>
+                    )}
+                    {selectedAudio && (
+                      <div>
+                        <audio
+                          controls
+                          name=""
+                          src={URL.createObjectURL(selectedAudio)}
+                        />
+                        <button
+                          onClick={removeSelectedAudio}
                           className="pr-red-bg hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer mt-4 w-full max-w-lg "
                         >
                           Remove
@@ -182,7 +249,7 @@ const styles = {
   customheight: {
     height: "600px ",
   },
-  postHeight:{
-    height:"400px"
-  }
+  postHeight: {
+    height: "400px",
+  },
 };
